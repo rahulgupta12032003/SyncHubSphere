@@ -1,39 +1,72 @@
-import { getLocalStorage, removeLocalStorage } from '@/utils/storage';
-import axios, {
-  AxiosResponse,
-  AxiosError,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axiosClient from "@/config/axiosConfig";
 
-const apiService = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+// Utility function to handle GET requests
+export const getRequest = async (
+  url: string,
+  id?: Record<string, any>,
+  params?: Record<string, any>
+) => {
+  try {
+    const finalUrl = id ? `${url}/${id}` : url;
+    const response = await axiosClient.get(finalUrl, { params });
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "GET request failed:",
+      JSON.stringify(error.response, null, 2)
+    );
+    throw error;
+  }
+};
 
-// Request Interceptor
-apiService.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = getLocalStorage('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  },
-);
-// Response Interceptor
-apiService.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      removeLocalStorage('token');
-    }
-    return Promise.reject(error);
-  },
-);
+// Utility function to handle POST requests
+export const postRequest = async (url: string, data: any) => {
+  try {
+    console.log(url);
+    const response = await axiosClient.post(url, data);
+    // console.log("postRequest", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("POST request failed:", error.response);
+    throw error;
+  }
+};
 
-export default apiService;
+// Utility function to handle PUT requests
+export const putRequest = async (url: string, data: any) => {
+  try {
+    const response = await axiosClient.put(url, data);
+    return response.data;
+  } catch (error: any) {
+    console.error("PUT request failed:", error.response);
+    throw error;
+  }
+};
+
+// Utility function to handle DELETE requests
+export const deleteRequest = async (
+  url: string,
+  params?: Record<string, any>
+) => {
+  try {
+    const response = await axiosClient.delete(url, { params });
+    return response.data;
+  } catch (error: any) {
+    console.error("DELETE request failed:", error.response);
+    throw error;
+  }
+};
+
+// Utility function to handle PATCH requests
+export const patchRequest = async (url: string, data?: any) => {
+  try {
+    const response = await axiosClient.patch(url, data);
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "PATCH request failed:",
+      JSON.stringify(error.response, null, 2)
+    );
+    throw error;
+  }
+};
