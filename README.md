@@ -20,6 +20,46 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Prettier Manually
+
+### 1. Check the Style Changes
+
+- **All Files**
+
+```bash
+npx prettier --check .
+```
+
+- **Specific File**
+
+```bash
+npx prettier --check `file_path`
+```
+
+replace file path with the exact file path where you wanted to run the prettier
+
+### 2. Fix the Formatting
+
+- **All Files**
+
+```bash
+npx prettier --write .
+```
+
+- **Specific File**
+
+```bash
+npx prettier --write `file_path`
+```
+
+replace file path with the exact file path where you wanted to run the prettier
+
+### 3. Format all the Files with script
+
+```bash
+npm run format
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
